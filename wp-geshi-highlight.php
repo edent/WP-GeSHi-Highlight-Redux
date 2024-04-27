@@ -1,22 +1,25 @@
 <?php
 /*
 Plugin Name: WP-GeSHi-Highlight-Redux
-Plugin URI: https://gehrcke.de/wp-geshi-highlight
+Plugin URI: https://github.com/edent/WP-GeSHi-Highlight-Redux
 Description: Syntax highlighting for 259 languages. Mobile-friendly. Easy-to-use. Based on a rock-solid engine (GeSHi).
-Author: Dr. Jan-Philip Gehrcke
-Version: 1.4.3
-Author URI: https://gehrcke.de
+Author: Terence Eden
+Version: 1.5
+Author URI: https://edent.tel/
+
+WP-GeSHi-Highlight-Redux was originally based on WP-GeSHi-Highlight
+by Dr. Jan-Philip Gehrcke - https://gehrcke.de
 
 WP-GeSHi-Highlight was originally based on WP-Syntax by Ryan McGeary.
-These legacy code sections are labeled correspondingly.
+https://web.archive.org/web/20160606232402/http://wp-syntax.com/
 
 ################################################################################
-#   Contact: https://gehrcke.de -- jgehrcke@googlemail.com
 #
+#   Copyright (C) 2024- Terence Eden
 #   Copyright (C) 2010-2023 Dr. Jan-Philip Gehrcke
 #   Copyright (C) 2007-2009 Ryan McGeary (lines are labeled)
 #
-#   This file is part of WP-GeSHi-Highlight.
+#   This file is part of WP-GeSHi-Highlight-Redux.
 #   You can use, modify, redistribute this program under the terms of the GNU
 #   General Public License Version 2 (GPL2): http://www.gnu.org/licenses.
 #       This program is distributed in the hope that it will be useful, but
