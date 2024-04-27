@@ -12,7 +12,16 @@
 	This CSS attempts to create a basic yet accessible style for highlighted code.
 */
 
-.wp-geshi-highlight pre {
+.wp-geshi-highlight {
+	padding: 0;
+	margin: .5em;
+	overflow-x: auto;
+	border: none;
+	background-color: #fff;
+	width: fit-content;
+}
+
+.wp-geshi-highlight code {
 	color: #444;
 	overflow: visible;
 	margin: 0;
@@ -24,14 +33,6 @@
 	line-height: 1.25em;
 	font-family: Consolas, Monaco, 'Lucida Console', monospace;
 	word-wrap: normal; /* Otherwise Chrome wraps lines */
-	white-space: pre;
+	white-space: wrap;
 	font-weight: normal;
-}
-
-.wp-geshi-highlight {
-	padding: 0;
-	margin: 0;
-	overflow-x: auto;
-	border: none;
-	background-color: #fff;
 }

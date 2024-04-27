@@ -195,7 +195,7 @@ function wp_geshi_highlight_and_generate_css() {
 
 	// Check for `class_exists('GeSHi')` to prevent `Cannot redeclare class GeSHi` errors caused by another plugin including its own version of GeSHi.
 	// TODO: Include GeSHi via namespacing or class renaming.
-	if ( !class_exists( "GeSHi" )) include_once( "geshi/geshi.php" );
+	if ( !class_exists( "GeSHi" ) ) include_once( "geshi/geshi.php" );
 	$wp_geshi_css_code = "";
 	foreach ( $wp_geshi_codesnipmatch_arrays as $match_index => $match ) {
 		// Process match details.
@@ -206,6 +206,10 @@ function wp_geshi_highlight_and_generate_css() {
 
 		// Set up GeSHi.
 		$geshi = new GeSHi( $code, $language );
+
+		//	Remove wrapper so it can manually be put in a <code> block
+		//	http://qbnz.com/highlighter/geshi-doc.html#the-code-container
+		$geshi->set_header_type(GESHI_HEADER_NONE);
 		
 		// Output CSS code. Do *not* create inline styles.
 		$geshi->enable_classes();
@@ -214,8 +218,8 @@ function wp_geshi_highlight_and_generate_css() {
 		$geshi->enable_keyword_links( false );
 
 		// By default, geshi sets font size to 1em and line height to 1.2em.
-		// That does not fit many modern CSS architectures. Make this
-		// relative and, most importantly, customizable.
+		// That does not fit many modern CSS architectures.
+		// Remove the default style.
 		$geshi->set_code_style( "" );
 
 		// If the current language has not been processed in a previous iteration:
@@ -234,12 +238,12 @@ function wp_geshi_highlight_and_generate_css() {
 		$wp_geshi_requested_css_files[] = $cssfile;
 
 		//	Start the output
-		$output = "<div class=\"{$cssfile}\">";
+		$output = "<pre class=\"{$cssfile}\"><code class=\"{$language}\">";
 
 		// Create highlighted HTML code.
 		$output .= $geshi->parse_code();
 		if ($cssfile != "none") {
-			$output .= "</div>";
+			$output .= "</code></pre>";
 		}
 
 		// Store highlighted HTML code for later usage.
