@@ -1,18 +1,16 @@
-=== WP-GeSHi-Highlight — rock-solid syntax highlighting for 259 languages ===
-Contributors: jgehrcke
-Tags: syntax, highlight, code, geshi, highlighting, valid, fast
-Tested up to: 6.2
-Requires at least: 3.0
-Requires PHP: 5.6
-Stable tag: 1.4.3
+=== WP-GeSHi-Highlight-Redux — rock-solid syntax highlighting for 259 languages ===
+Contributors: edent, jgehrcke
+Tags: syntax, highlight, code, geshi, highlighting, syntax
+Tested up to: 6.5.2
+Requires at least: 6.5.2
+Requires PHP: 8.0
+Stable tag: 1.5
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Simple. Fast. 259 languages. Mobile-friendly. Rock-solid (GeSHi).
 
 == Description ==
-
-**• [Live demo](https://gehrcke.de/wp-geshi-highlight-demo/)**
 
 **• Highlights:**
 
@@ -32,49 +30,31 @@ WP-GeSHi-Highlight works as a drop-in replacement for [WP-Syntax](http://wordpre
 
 **• Usage:**
 
-WordPress 5 users: for now I have tested this plugin only with the [Classical Editor](https://wordpress.org/plugins/classic-editor/). Gutenberg is not yet supported (it may work though, let me know).
+Recommendation: Write in Markdown using the "Text" (raw) editor. Do not use the "Visual" editor. Do not use Gutenberg. 
 
-Recommendation: *use the "Text" (raw) editor*. Do not use the "Visual" editor. Switching between both may corrupt the contents of your code blocks.
+For example:
 
-In the text editor insert code blocks as `pre` blocks, and use the `lang` argument to define the language of the code snippet:
+````
+```php
+$a  = $b + 2;
+```
+````
 
-`<pre lang="language">
-    CODE
-</pre>`
+That will render as the HTML:
 
-A short example for the `bash` language:
+`<pre><code class="language-php">
+$a = 1;
+</code></pre>`
 
-`<pre lang="bash">
-    $ dd if=/dev/zero of=image.ext3 bs=1M count=10000 oflag=append conv=notrunc
-</pre>`
+Which will then be syntax highlighted.
 
 Publish/preview, and have a look at the result!
 
-Also check out the reference documentation for all available options. You can find it on the [plugin's website](https://gehrcke.de/wp-geshi-highlight). Note that more usage examples can be found on the [demo website](https://gehrcke.de/wp-geshi-highlight-demo/).
-
-**• Issues:**
-
-A bunch of websites have used this plugin for years, and it seems to serve its purpose well. If you find an issue please let me know: drop a [mail](mailto:jgehrcke@googlemail.com) or leave a [comment](http://gehrcke.de/wp-geshi-highlight).
-
-**• Theme compatibility of the default style sheet:**
-
-The default style sheet was tested with recent versions of all official themes (Twenty Ten to Twenty Fifteen), and with a large range of non-official themes such as Vantage, Customizr, ColorWay, Zerif Lite, Responsive, Storefront, Virtue, evolve, Make, Sparkling, Spacious, Enigma, Sydney, Point, Interface, SinglePage.
-
-Certain themes might define styles with a high specificity that negatively affect the visual code block appearance. It is difficult to impossible to anticipate all these cases in advance, so I expect this to happen in rare cases (the past has proven that these things happen). So, I need you to look out for these situations, and please report them!
-
 
 == Installation ==
-1. Upload the `wp-geshi-highlight` directory to the `/wp-content/plugins` directory.
+1. Upload the `wp-geshi-highlight-redux` directory to the `/wp-content/plugins` directory.
 1. Activate the plugin through the plugins menu in WordPress.
 1. Use it.
-
-
-== Frequently Asked Questions ==
-Please have a look at the [plugin's website](https://gehrcke.de/wp-geshi-highlight/#faq).
-
-
-== Screenshots ==
-I feel that a [live demonstration](https://gehrcke.de/wp-geshi-highlight-demo/) is better than just screenshots.
 
 
 == Changelog ==
