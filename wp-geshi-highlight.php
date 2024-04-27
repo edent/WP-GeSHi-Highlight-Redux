@@ -57,8 +57,7 @@ Via this hook, the plugin instructs WordPress to print include the following res
 ***/
 
 // Entry point of the plugin (right after WordPress has finished processing the user request, set up `$wp_query`, and right before the template renders the HTML output).
-add_action('template_redirect', 'wp_geshi_main');
-
+add_action( "template_redirect", "wp_geshi_main" );
 
 //	Main function
 function wp_geshi_main() {
@@ -76,14 +75,14 @@ function wp_geshi_main() {
 	$wp_geshi_comments = array();
 	$wp_geshi_used_languages = array();
 
-	// Snippets will temporarily be replaced by a unique token. Generate it.
-	$wp_geshi_run_token = uniqid(rand());
+	// Snippets will temporarily be replaced by a unique token.
+	$wp_geshi_run_token = uniqid( rand() );
 
 	// Filter all post/comment texts and store and replace code snippets.
 	wp_geshi_filter_and_replace_code_snippets();
 
 	// If no snippets to highlight were found it is time to leave.
-	if (!$wp_geshi_codesnipmatch_arrays || !count($wp_geshi_codesnipmatch_arrays)) return;
+	if ( !$wp_geshi_codesnipmatch_arrays || !count( $wp_geshi_codesnipmatch_arrays ) ) return;
 
 	// `$wp_geshi_codesnipmatch_arrays` is populated. Process it.
 	// That is GeSHi's task: generate HTML and CSS code.
@@ -91,21 +90,20 @@ function wp_geshi_main() {
 
 	// Now, `$wp_geshi_css_code` and `$wp_geshi_highlighted_matches` are set.
 	// Add action to add CSS code to HTML header.
-	add_action('wp_enqueue_scripts', 'wp_geshi_add_css_to_head');
+	add_action( "wp_enqueue_scripts", "wp_geshi_add_css_to_head" );
 
 	// Add high priority filter to replace comments with the ones stored in `$wp_geshi_comments`.
 	// In `wp_geshi_filter_and_replace_code_snippets()` the comments are queried, filtered and stored in `$wp_geshi_comments`.
 	// But, unlike posts, comments are queried again when `comments_template()` is called by the theme; so comments are read two times from the database.
 	// After the second read, all changes (including the "uuid replacement") are lost.
 	// The `comments_array` filter is triggered and can be used to set all comments to the state after the first filtering by wp-geshi-highlight (as saved in `$wp_geshi_comments`).
-	add_filter('comments_array', 'wp_geshi_insert_comments_with_uuid', 1);
+	add_filter( "comments_array", "wp_geshi_insert_comments_with_uuid", 1 );
 
 	// Add low priority filter to replace unique identifiers with highlighted code.
-	add_filter('the_content', 'wp_geshi_insert_highlighted_code_filter', 99);
-	add_filter('the_excerpt', 'wp_geshi_insert_highlighted_code_filter', 99);
-	add_filter('comment_text', 'wp_geshi_insert_highlighted_code_filter', 99);
+	add_filter( "the_content",  "wp_geshi_insert_highlighted_code_filter", 99 );
+	add_filter( "the_excerpt",  "wp_geshi_insert_highlighted_code_filter", 99 );
+	add_filter( "comment_text", "wp_geshi_insert_highlighted_code_filter", 99 );
 }
-
 
 // Parse all posts and comments related to the current query.
 // While iterating over these texts, do the following:
@@ -115,29 +113,31 @@ function wp_geshi_main() {
 function wp_geshi_filter_and_replace_code_snippets() {
 	global $wp_query;
 	global $wp_geshi_comments;
+	
 	// Iterate over all posts in this query.
-	foreach ($wp_query->posts as $post) {
+	foreach ( $wp_query->posts as $post ) {
 		// Extract code snippets from the content. Replace them.
 		$post->post_content = wp_geshi_filter_replace_code($post->post_content);
+		
 		// Iterate over all approved comments belonging to this post.
 		// Store comments with uuid (code replacement) in `$wp_geshi_comments`.
-		$comments = get_approved_comments($post->ID);
-		foreach ($comments as $comment) {
+		$comments = get_approved_comments( $post->ID );
+		foreach ( $comments as $comment ) {
 			$wp_geshi_comments[$comment->comment_ID] =
-				wp_geshi_filter_replace_code($comment->comment_content);
+				wp_geshi_filter_replace_code( $comment->comment_content );
 		}
 	}
 }
 
-
 // This is called from the comments_array filter.
 // Replace comments from the second DB read with the ones stored in `$wp_geshi_comments`.
-function wp_geshi_insert_comments_with_uuid($comments_2nd_read) {
+function wp_geshi_insert_comments_with_uuid( $comments_2nd_read ) {
 	global $wp_geshi_comments;
+	
 	// Iterate over comments from 2nd read.
 	// Call by reference, otherwise the changes have no effect.
-	foreach ($comments_2nd_read as &$comment) {
-		if (array_key_exists($comment->comment_ID, $wp_geshi_comments)) {
+	foreach ( $comments_2nd_read as &$comment ) {
+		if (array_key_exists( $comment->comment_ID, $wp_geshi_comments )) {
 			// Replace the comment content from 2nd read with the content that was created after the 1st read.
 			$comment->comment_content =
 				$wp_geshi_comments[$comment->comment_ID];
@@ -145,7 +145,6 @@ function wp_geshi_insert_comments_with_uuid($comments_2nd_read) {
 	}
 	return $comments_2nd_read;
 }
-
 
 // Search all <pre><code class="language-*"></code></pre> occurrences.
 // Store them globally.
@@ -163,14 +162,13 @@ function wp_geshi_filter_replace_code($s) {
 	);
 }
 
-
 // Store snippet data. Return identifier for this snippet.
-function wp_geshi_store_and_substitute($match_array) {
+function wp_geshi_store_and_substitute( $match_array ) {
 	global $wp_geshi_run_token, $wp_geshi_codesnipmatch_arrays;
 
 	// count() returns 0 if the variable is not set already.
 	// Index is required for building the identifier for this code snippet.
-	$match_index = $wp_geshi_codesnipmatch_arrays ? count($wp_geshi_codesnipmatch_arrays) : 0;
+	$match_index = $wp_geshi_codesnipmatch_arrays ? count( $wp_geshi_codesnipmatch_arrays ) : 0;
 
 	// Elements of `$match_array` are strings matching the sub-expressions in the regular expression search from `wp_geshi_filter_replace_code()`.
 	// They contain the language and the code snippet itself.
@@ -185,7 +183,6 @@ function wp_geshi_store_and_substitute($match_array) {
 		sprintf("%06d", $match_index) . "</p>";
 }
 
-
 // Iterate through all match arrays in `$wp_geshi_codesnipmatch_arrays`.
 // Perform highlighting operation and store the resulting HTML in `$wp_geshi_highlighted_matches[$match_index]`.
 // Generate CSS code and append it to global `$wp_geshi_css_code`.
@@ -198,28 +195,28 @@ function wp_geshi_highlight_and_generate_css() {
 
 	// Check for `class_exists('GeSHi')` to prevent `Cannot redeclare class GeSHi` errors caused by another plugin including its own version of GeSHi.
 	// TODO: Include GeSHi via namespacing or class renaming.
-	if (!class_exists('GeSHi')) include_once("geshi/geshi.php");
+	if ( !class_exists( "GeSHi" )) include_once( "geshi/geshi.php" );
 	$wp_geshi_css_code = "";
-	foreach ($wp_geshi_codesnipmatch_arrays as $match_index => $match) {
+	foreach ( $wp_geshi_codesnipmatch_arrays as $match_index => $match ) {
 		// Process match details.
 		// The array structure is explained in `wp_geshi_filter_replace_code()`.
-		$language = strtolower(trim($match[1]));
-		$code = wp_geshi_code_trim($match[2]);
-		$code = htmlspecialchars_decode($code);
+		$language = strtolower( trim( $match[1] ) );
+		$code   = wp_geshi_code_trim( $match[2] );
+		$code = htmlspecialchars_decode( $code );
 
 		// Set up GeSHi.
-		$geshi = new GeSHi($code, $language);
+		$geshi = new GeSHi( $code, $language );
 		
-		// Output CSS code / do *not* create inline styles.
+		// Output CSS code. Do *not* create inline styles.
 		$geshi->enable_classes();
 		
 		// Disable keyword links.
-		$geshi->enable_keyword_links(false);
+		$geshi->enable_keyword_links( false );
 
 		// By default, geshi sets font size to 1em and line height to 1.2em.
 		// That does not fit many modern CSS architectures. Make this
 		// relative and, most importantly, customizable.
-		$geshi->set_code_style('');
+		$geshi->set_code_style( "" );
 
 		// If the current language has not been processed in a previous iteration:
 		// - create CSS code for this language
@@ -227,9 +224,9 @@ function wp_geshi_highlight_and_generate_css() {
 		// $geshi->get_stylesheet(false) disables the economy mode, i.e. this will return the full CSS code for the given language.
 		//	See http://qbnz.com/highlighter/geshi-doc.html#getting-stylesheet
 		// This allows reuse of the same CSS code for multiple code blocks of the same language.
-		if (!in_array($language, $wp_geshi_used_languages)) {
+		if ( !in_array( $language, $wp_geshi_used_languages ) ) {
 			$wp_geshi_used_languages[] = $language;
-			$wp_geshi_css_code .= $geshi->get_stylesheet(false);
+			$wp_geshi_css_code .= $geshi->get_stylesheet( false );
 		}
 
 		// Append the default css file to the array.
@@ -237,12 +234,12 @@ function wp_geshi_highlight_and_generate_css() {
 		$wp_geshi_requested_css_files[] = $cssfile;
 
 		//	Start the output
-		$output = '<div class="' . $cssfile . '">';
+		$output = "<div class=\"{$cssfile}\">";
 
 		// Create highlighted HTML code.
 		$output .= $geshi->parse_code();
 		if ($cssfile != "none") {
-			$output .= '</div>';
+			$output .= "</div>";
 		}
 
 		// Store highlighted HTML code for later usage.
@@ -253,12 +250,11 @@ function wp_geshi_highlight_and_generate_css() {
 	// Highlighted code is stored.
 	// CSS code has been generated.
 	// Delete what is not required any more.
-	unset($wp_geshi_codesnipmatch_arrays);
+	unset( $wp_geshi_codesnipmatch_arrays );
 }
 
-
 // Replace snippet IDs with highlighted HTML.
-function wp_geshi_insert_highlighted_code_filter($content) {
+function wp_geshi_insert_highlighted_code_filter( $content ) {
 	global $wp_geshi_run_token;
 	return preg_replace_callback(
 		"/<p>\s*" . $wp_geshi_run_token . "_(\d{6})\s*<\/p>/si",
@@ -268,19 +264,19 @@ function wp_geshi_insert_highlighted_code_filter($content) {
 }
 
 //	Add matches to the highlighted code
-function wp_geshi_get_highlighted_code($match) {
+function wp_geshi_get_highlighted_code( $match ) {
 	global $wp_geshi_highlighted_matches;
 	// Found a unique identifier. Extract code snippet match index.
-	$match_index = intval($match[1]);
+	$match_index = intval( $match[1] );
 	// Return corresponding highlighted code.
 	return $wp_geshi_highlighted_matches[$match_index];
 }
 
 //	Trimming function
-function wp_geshi_code_trim($code) {
+function wp_geshi_code_trim( $code ) {
 	// Special ltrim because leading whitespace matters on 1st line of content.
-	$code = preg_replace("/^\s*\n/siU", "", $code);
-	$code = rtrim($code);
+	$code = preg_replace( "/^\s*\n/siU", "", $code );
+	$code = rtrim( $code );
 	return $code;
 }
 
@@ -309,15 +305,15 @@ function wp_geshi_add_css_to_head() {
 	// Remove duplicates.
 	$wp_geshi_requested_css_files = array_unique($wp_geshi_requested_css_files);
 
-	foreach ($wp_geshi_requested_css_files as $cssfile) {
+	foreach ( $wp_geshi_requested_css_files as $cssfile ) {
 		$cssfilename = $cssfile . ".css";
 		// If the CSS file is found in the `get_stylesheet_directory()`, make it take precedence over the CSS file in the plugin directory.
-		$theme_css_path = $theme_dir . $cssfilename;
+		$theme_css_path  = $theme_dir  . $cssfilename;
 		$plugin_css_path = $plugin_dir . $cssfilename;
-		if (file_exists($theme_css_path))
+		if ( file_exists( $theme_css_path ) )
 			// Use the CSS file from the theme directory.
 			$cssurl = $theme_dir_url . $cssfilename;
-		elseif (file_exists($plugin_css_path))
+		elseif ( file_exists( $plugin_css_path ) )
 			// Use the CSS file from the plugin directory.
 			$cssurl = $plugin_dir_url . $cssfilename;
 		else
@@ -326,59 +322,12 @@ function wp_geshi_add_css_to_head() {
 		if ($cssurl) {
 			// Instruct WordPress to include this resource in the HTML head.
 			// https://codex.wordpress.org/Function_Reference/wp_enqueue_style
-			wp_enqueue_style("wpgeshi-" . $cssfile, $cssurl);
+			wp_enqueue_style( "wpgeshi-" . $cssfile, $cssurl );
 		}
 	}
 
 	// Echo GeSHi highlighting CSS code inline.
-	if (strlen($wp_geshi_css_code) > 0)
-		echo "<style type=\"text/css\">\n" . $wp_geshi_css_code . "</style>\n";
-}
-
-
-// Set allowed attributes for pre tags. For more info see wp-includes/kses.php
-// Also see http://code.tutsplus.com/articles/new-wp-config-tweaks-you-probably-dont-know--wp-35396
-if (!CUSTOM_TAGS) {
-	$allowedposttags['pre'] = array(
-		'lang' => array(),
-		'line' => array(),
-		'escaped' => array(),
-		'cssfile' => array()
-	);
-	// Allow plugin use in comments.
-	$allowedtags['pre'] = array(
-		'lang' => array(),
-		'line' => array(),
-		'escaped' => array(),
-		'cssfile' => array()
-	);
-}
-
-//	Prevent <pre> elements being mangled
-function wp_geshi_tiny_mce_settings_filter($settings) {
-	// Upon switching between the "text" (raw) view and the "HTML" (TinyMCE-based) view the TinyMCE editor may modify a post'scontent.
-	// This filter instructs TinyMCE to leave <pre> elements alone when they have non-standard attributes as used by this plugin, such as `lang` and `cssfile` and `lang`.
-
-	// https://codex.wordpress.org/Plugin_API/Filter_Reference/tiny_mce_before_settings
-	// https://www.tiny.cloud/docs-3x/reference/configuration/Configuration3x@extended_valid_elements/
-	// https://wordpress.stackexchange.com/q/52582/1694
-	// https://www.wp-plugin-api.com/example/9568/
-
-	// From the TinyMCE docs:
-	// "When adding a new attribute by specifying an existing element rule (e.g. img), the entire rule for that element is over-ridden" 
-	// Therefore, allow `pre[*]` which should be less strict than any other specification string for the `pre` element.
-
-	// If other plugins modify extended_valid_elements then there is no conflict unless the `pre` tag behavior gets modified.
-	// Upon conflict the filter ID matters I believe.
-
-	$ext = 'pre[*]';
-
-	if (isset($settings['extended_valid_elements'])) {
-		$settings['extended_valid_elements'] .= ',' . $ext;
-	} else {
-		$settings['extended_valid_elements'] = $ext;
+	if ( strlen( $wp_geshi_css_code ) > 0 ) {
+		echo "<style type=\"text/css\">" . $wp_geshi_css_code . "</style>";
 	}
-
-	return $settings;
 }
-add_filter('tiny_mce_before_init', 'wp_geshi_tiny_mce_settings_filter', 99);
