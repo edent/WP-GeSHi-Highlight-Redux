@@ -12,3 +12,6 @@ This fork contains some bugfixes, changes, and improvements by [Terence Eden](ht
 
 * RSS & Atom feeds - disable code highlighting
 * Remove extra style wrappers
+* Markdown support
+* Remove line-numbers
+* Remove escape option (escape now permanent)

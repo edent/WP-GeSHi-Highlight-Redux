@@ -233,13 +233,11 @@ function wp_geshi_insert_comments_with_uuid($comments_2nd_read) {
 // 5: code
 function wp_geshi_filter_replace_code($s) {
     return preg_replace_callback(
-        "/\s*<pre(?:lang=[\"']([\w-]+)[\"']|line=[\"'](\d*)[\"']"
-        ."|escaped=[\"'](true|false)?[\"']|cssfile=[\"']([\S]+)[\"']|\s)+>".
-        "(.*)<\/pre>\s*/siU",
+        "/\s*<pre><code(?:class=[\"']language\-([\w-]+)[\"']|\s)+>(.*)<\/code><\/pre>\s*/siU",
         "wp_geshi_store_and_substitute",
         $s
-        );
-    }
+    );
+}
 
 
 // Store snippet data. Return identifier for this snippet.
@@ -289,12 +287,8 @@ function wp_geshi_highlight_and_generate_css() {
         // Process match details. The array structure is explained in
         // a comment to function `wp_geshi_filter_replace_code()`.
         $language = strtolower(trim($match[1]));
-        $line = trim($match[2]);
-        $escaped = trim($match[3]);
-        $cssfile = trim($match[4]);
-        $code = wp_geshi_code_trim($match[5]);
-        if ($escaped == "true")
-            $code = htmlspecialchars_decode($code); // (C) Ryan McGeary
+        $code = wp_geshi_code_trim($match[2]);
+        $code = htmlspecialchars_decode($code); // (C) Ryan McGeary
 
         // Set up GeSHi.
         $geshi = new GeSHi($code, $language);
@@ -303,10 +297,6 @@ function wp_geshi_highlight_and_generate_css() {
         // Disable keyword links.
         $geshi->enable_keyword_links(false);
 
-        if ($line) {
-            $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
-            $geshi->start_line_numbers_at($line);
-            }
 
         // Set the output type. Reference:
         // http://qbnz.com/highlighter/geshi-doc.html#the-code-container
@@ -331,15 +321,11 @@ function wp_geshi_highlight_and_generate_css() {
             }
 
         $output = "";
-        // cssfile "none" means no wrapping divs at all.
-        if ($cssfile != "none") {
-            if (empty($cssfile))
-                // For this code snippet the default css file is required.
-                $cssfile = "wp-geshi-highlight";
-            // Append "the css file" to the array.
-            $wp_geshi_requested_css_files[] = $cssfile;
-            $output .= '<div class="'.$cssfile.'">';
-            }
+        $cssfile = "wp-geshi-highlight";
+        // Append "the css file" to the array.
+        $wp_geshi_requested_css_files[] = $cssfile;
+        $output .= '<div class="'.$cssfile.'">';
+        
         // Create highlighted HTML code.
         $output .= $geshi->parse_code();
         if ($cssfile != "none")
