@@ -15,3 +15,6 @@ This fork contains some bugfixes, changes, and improvements by [Terence Eden](ht
 * Markdown support
 * Remove line-numbers
 * Remove escape option (escape now permanent)
+* Remove TinyMCE changes
+* Remove custom CSS options
+* Improve default CSS

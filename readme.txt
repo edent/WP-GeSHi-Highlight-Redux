@@ -62,6 +62,9 @@ Publish/preview, and have a look at the result!
 * Markdown support
 * Remove line-numbers
 * Remove escape option (escape now permanent)
+* Remove TinyMCE changes
+* Remove custom CSS options
+* Improve default CSS
 
 = 1.4.3 (2023-04-30) =
 * Update GeSHi to commit 7884d2 (Feb 19, 2023).
