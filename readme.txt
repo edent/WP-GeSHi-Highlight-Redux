@@ -23,7 +23,7 @@ Simple. Fast. 259 languages. Mobile-friendly. Rock-solid (GeSHi).
 * Clean, small and valid HTML output.
 * Well-documented source code using modern WordPress API calls.
 * Based on [GeSHi](http://qbnz.com/highlighter/), a reliable and well-established PHP highlighting engine, used by popular community forum applications such as phpBB or wiki applications such as Dokuwiki or MediaWiki.
-* Forked from [WP-GeSHi-Highlight(https://gehrcke.de/wp-geshi-highlight/)
+* Forked from [WP-GeSHi-Highlight](https://gehrcke.de/wp-geshi-highlight/)
 
 **• Usage:**
 
@@ -58,6 +58,7 @@ Publish/preview, and have a look at the result!
 
 = 1.5.0 (2024-04-30) -
 * RSS & Atom feeds - disable code highlighting
+* Remove extra style wrappers
 
 = 1.4.3 (2023-04-30) =
 * Update GeSHi to commit 7884d2 (Feb 19, 2023).

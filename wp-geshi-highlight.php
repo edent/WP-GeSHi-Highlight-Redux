@@ -260,8 +260,8 @@ function wp_geshi_store_and_substitute($match_array) {
 
     // Return a string that identifies the match.
     // This string is meant to replaces the <pre args>code</pre> pattern.
-    return "\n<p>".$wp_geshi_run_token."_".
-        sprintf("%06d",$match_index)."</p>\n"; // (C) Ryan McGeary
+    return "<p>".$wp_geshi_run_token."_".
+        sprintf("%06d",$match_index)."</p>"; // (C) Ryan McGeary
     }
 
 
@@ -338,17 +338,12 @@ function wp_geshi_highlight_and_generate_css() {
                 $cssfile = "wp-geshi-highlight";
             // Append "the css file" to the array.
             $wp_geshi_requested_css_files[] = $cssfile;
-            $output .= "\n\n".'<div class="'.$cssfile.'-wrap5">'.
-                       '<div class="'.$cssfile.'-wrap4">'.
-                       '<div class="'.$cssfile.'-wrap3">'.
-                       '<div class="'.$cssfile.'-wrap2">'.
-                       '<div class="'.$cssfile.'-wrap">'.
-                       '<div class="'.$cssfile.'">';
+            $output .= '<div class="'.$cssfile.'">';
             }
         // Create highlighted HTML code.
         $output .= $geshi->parse_code();
         if ($cssfile != "none")
-            $output .= '</div></div></div></div></div></div>'."\n\n";
+            $output .= '</div>';
         // Store highlighted HTML code for later usage.
         $wp_geshi_highlighted_matches[$match_index] = $output;
         }

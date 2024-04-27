@@ -9,4 +9,6 @@ This fork contains some bugfixes, changes, and improvements by [Terence Eden](ht
 ## Changelog
 
 ### 1.5.0
+
 * RSS & Atom feeds - disable code highlighting
+* Remove extra style wrappers
