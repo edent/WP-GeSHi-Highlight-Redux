@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: WP-GeSHi-Highlight
+Plugin Name: WP-GeSHi-Highlight-Redux
 Plugin URI: https://gehrcke.de/wp-geshi-highlight
 Description: Syntax highlighting for 259 languages. Mobile-friendly. Easy-to-use. Based on a rock-solid engine (GeSHi).
 Author: Dr. Jan-Philip Gehrcke

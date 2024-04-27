@@ -17,16 +17,13 @@ Simple. Fast. 259 languages. Mobile-friendly. Rock-solid (GeSHi).
 * Supports [259 languages](https://github.com/GeSHi/geshi-1.0/tree/v1.0.9.1/src/geshi).
 * Server-side. Saves bandwidth, latency, and battery compared to client-side rendering.
 * Near-zero load on the backend. With a caching solution this does not affect your page load time at all.
-* Line numbering. If you want to (no vertical displacements between code line and line number).
 * Default style was tested with more than 20 themes, including Twenty Ten to Fifteen, and tweaked based on a bunch of user feedback.
 * If you'd like to tweak the style: just provide your own CSS file. Styles are highly & easily configurable.
 * Per-block styles: each code block on a single page can be styled on its own (if that is something you would liked to do).
 * Clean, small and valid HTML output.
 * Well-documented source code using modern WordPress API calls.
-* I have maintained this plugin for several years and I plan to continue to provide support.
 * Based on [GeSHi](http://qbnz.com/highlighter/), a reliable and well-established PHP highlighting engine, used by popular community forum applications such as phpBB or wiki applications such as Dokuwiki or MediaWiki.
-
-WP-GeSHi-Highlight works as a drop-in replacement for [WP-Syntax](http://wordpress.org/extend/plugins/wp-syntax/), which does not seem to be maintained anymore (as of 2015). Make the switch, it should just work (let me know how it went)!
+* Forked from [WP-GeSHi-Highlight(https://gehrcke.de/wp-geshi-highlight/)
 
 **• Usage:**
 
