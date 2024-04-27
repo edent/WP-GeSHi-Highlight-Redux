@@ -130,6 +130,9 @@ add_action('template_redirect', 'wp_geshi_main');
 
 
 function wp_geshi_main() {
+    //	Don't change the content on RSS / Atom feeds
+    if( is_feed() ){ return; }
+
     global $wp_geshi_codesnipmatch_arrays;
     global $wp_geshi_run_token;
     global $wp_geshi_comments;

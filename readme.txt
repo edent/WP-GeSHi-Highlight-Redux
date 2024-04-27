@@ -56,6 +56,9 @@ Publish/preview, and have a look at the result!
 
 == Changelog ==
 
+= 1.5.0 (2024-04-30) -
+* RSS & Atom feeds - disable code highlighting
+
 = 1.4.3 (2023-04-30) =
 * Update GeSHi to commit 7884d2 (Feb 19, 2023).
 * Fix for Golang undefined indices.
