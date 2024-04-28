@@ -18,3 +18,4 @@ This fork contains some bugfixes, changes, and improvements by [Terence Eden](ht
 * Remove TinyMCE changes
 * Remove custom CSS options
 * Improve default CSS
+* Improve HTML detection

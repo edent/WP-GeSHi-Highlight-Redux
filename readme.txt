@@ -65,6 +65,7 @@ Publish/preview, and have a look at the result!
 * Remove TinyMCE changes
 * Remove custom CSS options
 * Improve default CSS
+* Improve HTML detection
 
 = 1.4.3 (2023-04-30) =
 * Update GeSHi to commit 7884d2 (Feb 19, 2023).

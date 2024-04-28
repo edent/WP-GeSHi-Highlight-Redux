@@ -204,6 +204,20 @@ function wp_geshi_highlight_and_generate_css() {
 		$code   = wp_geshi_code_trim( $match[2] );
 		$code = htmlspecialchars_decode( $code );
 
+		//	GeSHi words by using the filename of the language. 
+		// Rename some languages for better support.
+		switch( $language ) {
+			case "html":
+				$language = "html5";
+				break;
+			case "python3":
+				$language = "python";
+				break;
+			case "python2":
+				$language = "python";
+				break;	
+		}
+
 		// Set up GeSHi.
 		$geshi = new GeSHi( $code, $language );
 
