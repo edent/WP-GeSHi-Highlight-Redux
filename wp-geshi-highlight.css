@@ -4,8 +4,8 @@
 
 	To create your own style:
 	* Copy this file (wp-geshi-highlight.css)
-	* Save it in your theme's directory
 	* Make changes to it
+	* Save it in your theme's root directory
 
 	The plugin defaults to your modified file.
 	
@@ -15,24 +15,16 @@
 .wp-geshi-highlight {
 	padding: 0;
 	margin: .5em;
-	overflow-x: auto;
-	border: none;
 	background-color: #fff;
-	width: fit-content;
 }
 
 .wp-geshi-highlight code {
 	color: #444;
-	overflow: visible;
 	margin: 0;
-	padding: .75em;
-	border: none;
-	box-shadow: none;
+	padding: .5em;
 	background: none;
-	font-size: .9em;
 	line-height: 1.25em;
-	font-family: Consolas, Monaco, 'Lucida Console', monospace;
-	word-wrap: normal; /* Otherwise Chrome wraps lines */
-	white-space: wrap;
+	word-wrap: normal;
+	white-space: nowrap;
 	font-weight: normal;
 }
