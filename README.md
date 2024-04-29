@@ -6,6 +6,8 @@ You can [download the original WordPress plugin](https://wordpress.org/plugins/w
 
 This fork contains some bugfixes, changes, and improvements by [Terence Eden](https://edent.tel).
 
+[![No Maintenance Intended](https://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
 ## Changelog
 
 ### 1.5.0
