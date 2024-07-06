@@ -218,7 +218,13 @@ function wp_geshi_highlight_and_generate_css() {
 				break;
 			case "python2":
 				$language = "python";
-				break;	
+				break;
+                        case "json":
+                                $language = "javascript";
+                                break;
+                        case "js":
+                                $language = "javascript";
+                                break;
 		}
 
 		// Set up GeSHi.
