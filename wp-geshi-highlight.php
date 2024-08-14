@@ -208,9 +208,9 @@ function wp_geshi_highlight_and_generate_css() {
 		$code   = wp_geshi_code_trim( $match[2] );
 		$code = htmlspecialchars_decode( $code );
 
-		//	GeSHi worfs by using the filename of the language.
+		//	GeSHi works by using the filename of the language.
 		//	For example ```java is loaded from geshi/geshi/java.php
-		// Rename some languages for better support.
+		//	Rename some languages for better support.
 		switch( $language ) {
 			case "html":
 				$language = "html5";
