@@ -158,7 +158,9 @@ function wp_geshi_insert_comments_with_uuid( $comments_2nd_read ) {
 // 2: code
 function wp_geshi_filter_replace_code($s) {
 	return preg_replace_callback(
-		"/\s*<pre><code(?:class=[\"']language\-([\w-]+)[\"']|\s)+>(.*)<\/code><\/pre>\s*/siU",
+		//"/\s*<pre><code(?:class=[\"']language\-([\w-]+)[\"']|\s)+>(.*)<\/code><\/pre>\s*/siU",
+		//	Match `language-whatever` and `whatever`
+        '/\s*<pre><code(?:class=["\'](?:language\-)?([\w-]+)["\']|\s)+>(.*)<\/code><\/pre>\s*/i',
 		"wp_geshi_store_and_substitute",
 		$s
 	);
@@ -219,12 +221,12 @@ function wp_geshi_highlight_and_generate_css() {
 			case "python2":
 				$language = "python";
 				break;
-                        case "json":
-                                $language = "javascript";
-                                break;
-                        case "js":
-                                $language = "javascript";
-                                break;
+			case "json":
+				$language = "javascript";
+				break;
+			case "js":
+				$language = "javascript";
+				break;
 		}
 
 		// Set up GeSHi.
@@ -261,7 +263,8 @@ function wp_geshi_highlight_and_generate_css() {
 		$wp_geshi_requested_css_files[] = $cssfile;
 
 		//	Start the output
-		$output = "<pre class=\"{$cssfile}\"><code class=\"{$language}\">";
+		//	Add a comment so we know it has worked
+		$output = "<!-- WP-Geshi {$language} -->\n<pre class=\"{$cssfile}\"><code class=\"{$language}\">";
 
 		// Create highlighted HTML code.
 		$output .= $geshi->parse_code();
