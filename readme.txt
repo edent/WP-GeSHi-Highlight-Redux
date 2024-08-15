@@ -56,7 +56,6 @@ Publish/preview, and have a look at the result!
 
 == Changelog ==
 = 1.6.0 (2024-08-15) -
-* Disable comment rendering
 * Move to post-Markdown rendering
 * More flexibility on the name of the class
 

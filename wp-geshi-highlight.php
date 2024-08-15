@@ -58,18 +58,15 @@ Via this hook, the plugin instructs WordPress to print include the following res
 * These filters run after most other plugins have done their job, i.e. shortly before the HTML is sent to the browser.
 * The filter code searches the content for the unique identifiers stored in step I.5.
 * If an identifier is found, it is replaced by the corresponding highlighted code snippet.
-
-TODO! Fix comment code blocks
-
 ***/
 
 // Entry point of the plugin (after the template renders the HTML output).
-add_filter( "the_content", "wp_geshi_main", 49 );
+add_action( "the_content", "wp_geshi_main", 49 );
 
 //	Main function
 function wp_geshi_main( $content ) {
 	//	Don't change the content on RSS / Atom feeds
-	if (is_feed()) {
+	if ( is_feed() ) {
 		return $content;
 	}
 
@@ -97,9 +94,9 @@ function wp_geshi_main( $content ) {
 	wp_geshi_highlight_and_generate_css();
 
 	// Now, `$wp_geshi_css_code` and `$wp_geshi_highlighted_matches` are set.
-	// Add action to add CSS code to HTML header.
-	add_action( "wp_enqueue_scripts", "wp_geshi_add_css_to_head" );
-
+	// Add the CSS code to HTML header.
+	wp_geshi_add_css_to_head();
+	
 	// Add high priority filter to replace comments with the ones stored in `$wp_geshi_comments`.
 	// In `wp_geshi_filter_and_replace_code_snippets()` the comments are queried, filtered and stored in `$wp_geshi_comments`.
 	// But, unlike posts, comments are queried again when `comments_template()` is called by the theme; so comments are read two times from the database.
@@ -127,21 +124,15 @@ function wp_geshi_filter_and_replace_code_snippets( $content ) {
 
 	$content = wp_geshi_filter_replace_code( $content );
 
-	
-	// Iterate over all posts in this query.
-	// foreach ( $wp_query->posts as $post ) {
-		// Extract code snippets from the content. Replace them.
-		// $post->post_content = wp_geshi_filter_replace_code($post->post_content);
-		
-		// $post = get_post();
-		// // Iterate over all approved comments belonging to this post.
-		// // Store comments with uuid (code replacement) in `$wp_geshi_comments`.
-		// $comments = get_approved_comments( $post->ID );
-		// foreach ( $comments as $comment ) {
-		// 	$wp_geshi_comments[$comment->comment_ID] =
-		// 		wp_geshi_filter_replace_code( $comment->comment_content );
-		// }
-	// }
+	//	Enrich the comments
+	$post = get_post();
+	// Iterate over all approved comments belonging to this post.
+	// Store comments with uuid (code replacement) in `$wp_geshi_comments`.
+	$comments = get_approved_comments( $post->ID );
+	foreach ( $comments as $comment ) {
+		$wp_geshi_comments[$comment->comment_ID] =
+			wp_geshi_filter_replace_code( $comment->comment_content );
+	}
 
 	return $content;
 }
@@ -150,7 +141,7 @@ function wp_geshi_filter_and_replace_code_snippets( $content ) {
 // Replace comments from the second DB read with the ones stored in `$wp_geshi_comments`.
 function wp_geshi_insert_comments_with_uuid( $comments_2nd_read ) {
 	global $wp_geshi_comments;
-	echo "2nd RRRRREAD!";
+	
 	// Iterate over comments from 2nd read.
 	// Call by reference, otherwise the changes have no effect.
 	foreach ( $comments_2nd_read as &$comment ) {
