@@ -10,6 +10,12 @@ This fork contains some bugfixes, changes, and improvements by [Terence Eden](ht
 
 ## Changelog
 
+### 1.6.0 (2024-08-15)
+
+* Disable comment rendering
+* Move to post-Markdown rendering
+* More flexibility on the name of the class
+
 ### 1.5.0
 
 * RSS & Atom feeds - disable code highlighting

@@ -4,7 +4,7 @@ Plugin Name: WP-GeSHi-Highlight-Redux
 Plugin URI: https://github.com/edent/WP-GeSHi-Highlight-Redux
 Description: Syntax highlighting for 259 languages. Mobile-friendly. Easy-to-use. Based on a rock-solid engine (GeSHi).
 Author: Terence Eden
-Version: 1.5
+Version: 1.6
 Author URI: https://edent.tel/
 
 WP-GeSHi-Highlight-Redux was originally based on WP-GeSHi-Highlight
@@ -24,7 +24,9 @@ You can use, modify, redistribute this program under the terms of the GNU Genera
 
 ## Advantages over comparable highlighters
 
-* WP-GeSHi-Highlight filters & replaces code snippets as early as possible. The highlighted code is inserted as late as possible. Hence, interference with other plugins is minimized.
+* WP-GeSHi-Highlight filters & replaces code snippets as late as possible.
+* The highlighted code is inserted after most other transformations.
+* This works well if a Markdown pre-processor is being used.
 * No computing resources are wasted if the current view is free of code snippets.
 
 ## Usage of GeSHi's get_stylesheet()
@@ -32,11 +34,11 @@ You can use, modify, redistribute this program under the terms of the GNU Genera
 
 ## This is how the plugin works for all page requests
 
-### I) template_redirect hook:
+### I) the_content hook:
 
-1. The user has sent a request. Wordpress has set up its `$wp_query` object. `$wp_query` contains information about all content potentially shown to the user.
+1. The page is about to be rendered. `$wp_query` contains information about all content potentially shown to the user.
 2. This plugin iterates over the post's content and each (approved) comment belonging to the post.
-3. This plugin searches for the pattern <pre><code class="language-*">CODE</code></pre>.
+3. This plugin searches for the pattern <pre><code class="language-*">CODE</code></pre> (the "language-" prefix is optional).
 4. If a match is found, the information (language and CODE) is stored in a global variable, together with a match index.
 5. If there is code to highlight, the occurrence of the pattern is replaced by a unique identifier containing the corresponding match index. Therefore, the content cannot be altered by any other plugin afterwards.
 6. GeSHi iterates over all code snippets and generates valid HTML code for each snippet, according to the given programming language.
@@ -52,22 +54,26 @@ Via this hook, the plugin instructs WordPress to print include the following res
 
 ### III) content filters:
 
-* The plugin defines three low priority filters on post text, post excerpt, and comment text. These filters run after most other plugins have done their job, i.e. shortly before the HTML is sent to the browser.
+* The plugin defines three low priority filters on post text, post excerpt, and comment text.
+* These filters run after most other plugins have done their job, i.e. shortly before the HTML is sent to the browser.
 * The filter code searches the content for the unique identifiers stored in step I.5.
 * If an identifier is found, it is replaced by the corresponding highlighted code snippet.
 
+TODO! Fix comment code blocks
+
 ***/
 
-// Entry point of the plugin (right after WordPress has finished processing the user request, set up `$wp_query`, and right before the template renders the HTML output).
-add_action( "template_redirect", "wp_geshi_main" );
+// Entry point of the plugin (after the template renders the HTML output).
+add_filter( "the_content", "wp_geshi_main", 49 );
 
 //	Main function
-function wp_geshi_main() {
+function wp_geshi_main( $content ) {
 	//	Don't change the content on RSS / Atom feeds
 	if (is_feed()) {
 		return;
 	}
 
+	//	Set up variables
 	global $wp_geshi_codesnipmatch_arrays;
 	global $wp_geshi_run_token;
 	global $wp_geshi_comments;
@@ -81,7 +87,7 @@ function wp_geshi_main() {
 	$wp_geshi_run_token = uniqid( rand() );
 
 	// Filter all post/comment texts and store and replace code snippets.
-	wp_geshi_filter_and_replace_code_snippets();
+	$content = wp_geshi_filter_and_replace_code_snippets( $content );
 
 	// If no snippets to highlight were found it is time to leave.
 	if ( !$wp_geshi_codesnipmatch_arrays || !count( $wp_geshi_codesnipmatch_arrays ) ) return;
@@ -105,6 +111,9 @@ function wp_geshi_main() {
 	add_filter( "the_content",  "wp_geshi_insert_highlighted_code_filter", 99 );
 	add_filter( "the_excerpt",  "wp_geshi_insert_highlighted_code_filter", 99 );
 	add_filter( "comment_text", "wp_geshi_insert_highlighted_code_filter", 99 );
+
+	//	The content has now been enhanced and can be returned
+	return $content;
 }
 
 // Parse all posts and comments related to the current query.
@@ -112,37 +121,42 @@ function wp_geshi_main() {
 // - Detect <pre><code class="language-*">CODE</code></pre> patterns.
 // - Store these patterns in a global variable.
 // - Modify post/comment texts: replace code patterns by a unique identifier.
-function wp_geshi_filter_and_replace_code_snippets() {
+function wp_geshi_filter_and_replace_code_snippets( $content ) {
 	global $wp_query;
 	global $wp_geshi_comments;
+
+	$content = wp_geshi_filter_replace_code( $content );
+
 	
 	// Iterate over all posts in this query.
-	foreach ( $wp_query->posts as $post ) {
+	// foreach ( $wp_query->posts as $post ) {
 		// Extract code snippets from the content. Replace them.
-		$post->post_content = wp_geshi_filter_replace_code($post->post_content);
+		// $post->post_content = wp_geshi_filter_replace_code($post->post_content);
 		
-		// Iterate over all approved comments belonging to this post.
-		// Store comments with uuid (code replacement) in `$wp_geshi_comments`.
-		$comments = get_approved_comments( $post->ID );
-		foreach ( $comments as $comment ) {
-			$wp_geshi_comments[$comment->comment_ID] =
-				wp_geshi_filter_replace_code( $comment->comment_content );
-		}
-	}
+		// $post = get_post();
+		// // Iterate over all approved comments belonging to this post.
+		// // Store comments with uuid (code replacement) in `$wp_geshi_comments`.
+		// $comments = get_approved_comments( $post->ID );
+		// foreach ( $comments as $comment ) {
+		// 	$wp_geshi_comments[$comment->comment_ID] =
+		// 		wp_geshi_filter_replace_code( $comment->comment_content );
+		// }
+	// }
+
+	return $content;
 }
 
 // This is called from the comments_array filter.
 // Replace comments from the second DB read with the ones stored in `$wp_geshi_comments`.
 function wp_geshi_insert_comments_with_uuid( $comments_2nd_read ) {
 	global $wp_geshi_comments;
-	
+	echo "2nd RRRRREAD!";
 	// Iterate over comments from 2nd read.
 	// Call by reference, otherwise the changes have no effect.
 	foreach ( $comments_2nd_read as &$comment ) {
 		if (array_key_exists( $comment->comment_ID, $wp_geshi_comments )) {
 			// Replace the comment content from 2nd read with the content that was created after the 1st read.
-			$comment->comment_content =
-				$wp_geshi_comments[$comment->comment_ID];
+			$comment->comment_content = $wp_geshi_comments[$comment->comment_ID];
 		}
 	}
 	return $comments_2nd_read;
@@ -160,7 +174,7 @@ function wp_geshi_filter_replace_code($s) {
 	return preg_replace_callback(
 		//"/\s*<pre><code(?:class=[\"']language\-([\w-]+)[\"']|\s)+>(.*)<\/code><\/pre>\s*/siU",
 		//	Match `language-whatever` and `whatever`
-        '/\s*<pre><code(?:class=["\'](?:language\-)?([\w-]+)["\']|\s)+>(.*)<\/code><\/pre>\s*/i',
+        '/\s*<pre><code(?:class=["\'](?:language\-)?([\w-]+)["\']|\s)+>(.*)<\/code><\/pre>\s*/siU',
 		"wp_geshi_store_and_substitute",
 		$s
 	);
@@ -205,11 +219,14 @@ function wp_geshi_highlight_and_generate_css() {
 		// Process match details.
 		// The array structure is explained in `wp_geshi_filter_replace_code()`.
 		$language = strtolower( trim( $match[1] ) );
+		//	Some Markdown parsers use "language-python"
+		$language = str_replace( "language-", "", $language );
+
 		$code   = wp_geshi_code_trim( $match[2] );
 		$code = htmlspecialchars_decode( $code );
 
 		//	GeSHi works by using the filename of the language.
-		//	For example ```java is loaded from geshi/geshi/java.php
+		//	For example java is loaded from geshi/geshi/java.php
 		//	Rename some languages for better support.
 		switch( $language ) {
 			case "html":

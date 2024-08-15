@@ -1,10 +1,10 @@
 === WP-GeSHi-Highlight-Redux — rock-solid syntax highlighting for 259 languages ===
 Contributors: edent, jgehrcke
 Tags: syntax, highlight, code, geshi, highlighting, syntax
-Tested up to: 6.5.2
-Requires at least: 6.5.2
-Requires PHP: 8.0
-Stable tag: 1.5
+Tested up to: 6.6
+Requires at least: 6.6
+Requires PHP: 8.3
+Stable tag: 1.6
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,10 @@ Publish/preview, and have a look at the result!
 
 
 == Changelog ==
+= 1.6.0 (2024-08-15) -
+* Disable comment rendering
+* Move to post-Markdown rendering
+* More flexibility on the name of the class
 
 = 1.5.0 (2024-04-30) -
 * RSS & Atom feeds - disable code highlighting
