@@ -70,7 +70,7 @@ add_filter( "the_content", "wp_geshi_main", 49 );
 function wp_geshi_main( $content ) {
 	//	Don't change the content on RSS / Atom feeds
 	if (is_feed()) {
-		return;
+		return $content;
 	}
 
 	//	Set up variables
