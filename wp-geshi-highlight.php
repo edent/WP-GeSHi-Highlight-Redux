@@ -65,8 +65,8 @@ add_action( "the_content", "wp_geshi_main", 49 );
 
 //	Main function
 function wp_geshi_main( $content ) {
-	//	Don't change the content on RSS / Atom feeds
-	if ( is_feed() ) {
+	//	Don't change the content on RSS / Atom feeds, nor on lists
+	if ( is_feed() || !is_single() ) {
 		return $content;
 	}
 
@@ -87,7 +87,7 @@ function wp_geshi_main( $content ) {
 	$content = wp_geshi_filter_and_replace_code_snippets( $content );
 
 	// If no snippets to highlight were found it is time to leave.
-	if ( !$wp_geshi_codesnipmatch_arrays || !count( $wp_geshi_codesnipmatch_arrays ) ) return;
+	if ( !$wp_geshi_codesnipmatch_arrays || !count( $wp_geshi_codesnipmatch_arrays ) ) return $content;
 
 	// `$wp_geshi_codesnipmatch_arrays` is populated. Process it.
 	// That is GeSHi's task: generate HTML and CSS code.
