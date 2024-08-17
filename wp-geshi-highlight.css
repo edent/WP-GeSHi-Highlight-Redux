@@ -14,14 +14,13 @@
 
 .wp-geshi-highlight {
 	padding: 0;
-	margin: .5em;
 	background-color: #fff;
 }
 
 .wp-geshi-highlight code {
 	color: #444;
 	margin: 0;
-	padding: .5em;
+	padding: 1em;
 	background: none;
 	line-height: 1.25em;
 	word-wrap: normal;
@@ -35,6 +34,14 @@
 	color: black;
 	font-weight: bold;
 	border-radius: 0;
-	padding: .5em;
+	padding: 0 1em 0 0;
 	user-select: none;
+	pointer-events: none;
+}
+
+.wp-geshi-language-icon {
+	display: inline;
+	border-radius: 0;
+	vertical-align: middle;
+	width: 2.5em;
 }

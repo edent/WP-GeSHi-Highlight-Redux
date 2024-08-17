@@ -221,20 +221,43 @@ function wp_geshi_highlight_and_generate_css() {
 		//	Rename some languages for better support.
 		switch( $language ) {
 			case "html":
-				$language = "html5";
+				$language         = "html5";
+				$language_logo    = "html5";
+				$language_display = "HTML";
+				break;
+			case "html5":
+				$language         = "html5";
+				$language_logo    = "html5";
+				$language_display = "HTML";
+				break;
+			case "python":
+				$language         = "python";
+				$language_logo    = "python";
+				$language_display = "Python 3";
 				break;
 			case "python3":
-				$language = "python";
+				$language         = "python";
+				$language_logo    = "python";
+				$language_display = "Python 3";
 				break;
 			case "python2":
-				$language = "python";
+				$language         = "python";
+				$language_logo    = "python";
+				$language_display = "Python 2";
 				break;
 			case "json":
-				$language = "javascript";
+				$language         = "javascript";
+				$language_logo    = "json";
+				$language_display = "JSON";
 				break;
 			case "js":
-				$language = "javascript";
+				$language         = "javascript";
+				$language_logo    = "javascript";
+				$language_display = "JavaScript";
 				break;
+			default:
+				$language_logo    = $language;
+				$language_display =	strtoupper( $language );
 		}
 
 		// Set up GeSHi.
@@ -271,12 +294,22 @@ function wp_geshi_highlight_and_generate_css() {
 		$wp_geshi_requested_css_files[] = $cssfile;
 
 		//	Start the output
+
+		//	Display an icon if one exists
+		if ( file_exists(    get_template_directory()     . "/assets/images/" . $language_logo . ".svg" ) ) {
+			$language_icon = get_template_directory_uri() . "/assets/images/" . $language_logo . ".svg";
+			$language_icon_html = "<img src=\"{$language_icon}\" width=\"16\" alt=\"\" class=\"wp-geshi-language-icon\"> ";
+		} else {
+			$language_icon_html = "";
+		}
+
 		//	Add a comment so we know it has worked
-		$language_display = strtoupper( $language );
 		$output  = "<!-- WP-Geshi {$language} -->\n";
+
+		//	Add semantic microdata
 		$output .= "<pre class=\"{$cssfile}\" itemscope itemtype=\"https://schema.org/SoftwareSourceCode\">";
-		$output .= "<span class=\"wp-geshi-language\" itemprop=\"programmingLanguage\">{$language_display}</span>";
-		$output .= "<code class=\"{$language}\" itemprop=\"text\">";
+		$output .=    "<span class=\"wp-geshi-language\" itemprop=\"programmingLanguage\">{$language_icon_html}{$language_display}</span>";
+		$output .=    "<code class=\"{$language}\" itemprop=\"text\">";
 
 		// Create highlighted HTML code.
 		$output .= $geshi->parse_code();
