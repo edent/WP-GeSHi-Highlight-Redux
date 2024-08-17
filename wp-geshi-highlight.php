@@ -296,11 +296,15 @@ function wp_geshi_highlight_and_generate_css() {
 		//	Start the output
 
 		//	Display an icon if one exists
-		if ( file_exists(    get_template_directory()     . "/assets/images/" . $language_logo . ".svg" ) ) {
-			$language_icon = get_template_directory_uri() . "/assets/images/" . $language_logo . ".svg";
-			$language_icon_html = "<img src=\"{$language_icon}\" width=\"16\" alt=\"\" class=\"wp-geshi-language-icon\"> ";
+		if ( file_exists(    plugin_dir_path( __FILE__ ) . "svg/" . $language_logo . ".svg" ) ) {
+			$language_icon = plugin_dir_url(  __FILE__ ) . "svg/" . $language_logo . ".svg";
+			$language_html = 
+				"<span class=\"wp-geshi-language\">" .
+			    	"<img src=\"{$language_icon}\" width=\"32\" alt=\"{$language_display}\" class=\"wp-geshi-language-icon\">".
+					"<meta itemprop=\"programmingLanguage\" content=\"{$language_display}\">".
+				"</span>";
 		} else {
-			$language_icon_html = "";
+			$language_html = "<span class=\"wp-geshi-language\" itemprop=\"programmingLanguage\"> {$language_display}</span>";
 		}
 
 		//	Add a comment so we know it has worked
@@ -308,7 +312,7 @@ function wp_geshi_highlight_and_generate_css() {
 
 		//	Add semantic microdata
 		$output .= "<pre class=\"{$cssfile}\" itemscope itemtype=\"https://schema.org/SoftwareSourceCode\">";
-		$output .=    "<span class=\"wp-geshi-language\" itemprop=\"programmingLanguage\">{$language_icon_html}{$language_display}</span>";
+		$output .=    $language_html;
 		$output .=    "<code class=\"{$language}\" itemprop=\"text\">";
 
 		// Create highlighted HTML code.
