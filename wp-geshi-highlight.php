@@ -272,7 +272,11 @@ function wp_geshi_highlight_and_generate_css() {
 
 		//	Start the output
 		//	Add a comment so we know it has worked
-		$output = "<!-- WP-Geshi {$language} -->\n<pre class=\"{$cssfile}\"><code class=\"{$language}\">";
+		$language_display = strtoupper( $language );
+		$output  = "<!-- WP-Geshi {$language} -->\n";
+		$output .= "<pre class=\"{$cssfile}\" itemscope itemtype=\"https://schema.org/SoftwareSourceCode\">";
+		$output .= "<span class=\"wp-geshi-language\" itemprop=\"programmingLanguage\">{$language_display}</span>";
+		$output .= "<code class=\"{$language}\" itemprop=\"text\">";
 
 		// Create highlighted HTML code.
 		$output .= $geshi->parse_code();

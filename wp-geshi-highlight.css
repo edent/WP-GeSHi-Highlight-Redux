@@ -28,3 +28,13 @@
 	white-space: nowrap;
 	font-weight: normal;
 }
+
+.wp-geshi-language {
+	display: block;
+	background: lightgray;
+	color: black;
+	font-weight: bold;
+	border-radius: 0;
+	padding: .5em;
+	user-select: none;
+}
