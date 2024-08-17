@@ -14,18 +14,22 @@
 
 .wp-geshi-highlight {
 	padding: 0;
-	background-color: #fff;
 }
 
 .wp-geshi-highlight code {
 	color: #444;
 	margin: 0;
 	padding: 1em;
-	background: none;
+	background-color: #fff;
 	line-height: 1.25em;
 	word-wrap: normal;
 	white-space: nowrap;
 	font-weight: normal;
+	border-radius: 0;
+	/* Non-standardised yet */
+	width: stretch;
+	width: -moz-available;
+	width: -webkit-fill-available;
 }
 
 .wp-geshi-language {
