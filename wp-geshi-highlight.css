@@ -14,6 +14,7 @@
 
 .wp-geshi-highlight {
 	padding: 0;
+	background: #d3d3d3;
 }
 
 .wp-geshi-highlight code {
@@ -26,15 +27,10 @@
 	white-space: nowrap;
 	font-weight: normal;
 	border-radius: 0;
-	/* Non-standardised yet */
-	width: stretch;
-	width: -moz-available;
-	width: -webkit-fill-available;
 }
 
 .wp-geshi-language {
 	display: block;
-	background: lightgray;
 	color: black;
 	font-weight: bold;
 	border-radius: 0;

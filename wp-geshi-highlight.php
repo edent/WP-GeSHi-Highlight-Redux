@@ -301,7 +301,7 @@ function wp_geshi_highlight_and_generate_css() {
 			$language_html = 
 				"<span class=\"wp-geshi-language\">" .
 			    	"<img src=\"{$language_icon}\" width=\"32\" alt=\"{$language_display}\" class=\"wp-geshi-language-icon\">".
-					"<meta itemprop=\"programmingLanguage\" content=\"{$language_display}\">".
+					"<span itemprop=\"programmingLanguage\"> {$language_display}</span>".
 				"</span>";
 		} else {
 			$language_html = "<span class=\"wp-geshi-language\" itemprop=\"programmingLanguage\"> {$language_display}</span>";
@@ -407,6 +407,8 @@ function wp_geshi_add_css_to_head() {
 
 	// Echo GeSHi highlighting CSS code inline.
 	if ( strlen( $wp_geshi_css_code ) > 0 ) {
-		echo "<style>" . $wp_geshi_css_code . "</style>";
+		// echo "<style>" . $wp_geshi_css_code . "</style>";
+		//	Cannot put a <style> in the body - so cheat and Base64 encode the link!
+		echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"data:text/css;base64," . base64_encode($wp_geshi_css_code) . "\">";
 	}
 }
