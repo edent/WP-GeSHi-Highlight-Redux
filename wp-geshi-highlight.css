@@ -27,6 +27,8 @@
 	white-space: nowrap;
 	font-weight: normal;
 	border-radius: 0;
+	display: inline-block;
+	filter: invert( var(--filter-invert) );
 }
 
 .wp-geshi-language {
