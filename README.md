@@ -14,6 +14,7 @@ This fork contains some bugfixes, changes, and improvements by [Terence Eden](ht
 
 * Move to post-Markdown rendering
 * More flexibility on the name of the class
+* Display code name and icon
 
 ### 1.5.0
 
