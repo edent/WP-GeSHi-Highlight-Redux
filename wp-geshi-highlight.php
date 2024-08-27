@@ -213,11 +213,10 @@ function wp_geshi_highlight_and_generate_css() {
 		//	Some Markdown parsers use "language-python"
 		$language = str_replace( "language-", "", $language );
 
-		$code   = wp_geshi_code_trim( $match[2] );
+		$code = wp_geshi_code_trim( $match[2] );
 		$code = htmlspecialchars_decode( $code );
 		//	Get rid of any badly encoded posts
 		$code = html_entity_decode( $code );
-
 
 		//	GeSHi works by using the filename of the language.
 		//	For example java is loaded from geshi/geshi/java.php
@@ -257,6 +256,11 @@ function wp_geshi_highlight_and_generate_css() {
 				$language         = "javascript";
 				$language_logo    = "javascript";
 				$language_display = "JavaScript";
+				break;
+			case "_":
+				$language         = "_";
+				$language_logo    = "";
+				$language_display = "";
 				break;
 			default:
 				$language_logo    = $language;
@@ -307,7 +311,12 @@ function wp_geshi_highlight_and_generate_css() {
 					"<span itemprop=\"programmingLanguage\"> {$language_display}</span>".
 				"</span>";
 		} else {
-			$language_html = "<span class=\"wp-geshi-language\" itemprop=\"programmingLanguage\"> {$language_display}</span>";
+			//	If this is the null languge (_) don't show anything
+			if ( $language_display != "" ){
+				$language_html = "<span class=\"wp-geshi-language\" itemprop=\"programmingLanguage\"> {$language_display}</span>";
+			} else {
+				$language_html = "";
+			}
 		}
 
 		//	Add a comment so we know it has worked
