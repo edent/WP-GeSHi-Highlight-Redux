@@ -257,6 +257,11 @@ function wp_geshi_highlight_and_generate_css() {
 				$language_logo    = "javascript";
 				$language_display = "JavaScript";
 				break;
+			case "svg":
+				$language         = "xml";
+				$language_logo    = "svg";
+				$language_display = "SVG";
+				break;
 			case "_":
 				$language         = "_";
 				$language_logo    = "";
