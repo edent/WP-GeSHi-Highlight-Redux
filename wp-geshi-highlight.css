@@ -43,7 +43,10 @@
 
 .wp-geshi-language-icon {
 	display: inline;
-	border-radius: 0;
 	vertical-align: middle;
 	width: 2.5em;
+}
+
+.wp-geshi-language img {
+	border-radius: 0;
 }
