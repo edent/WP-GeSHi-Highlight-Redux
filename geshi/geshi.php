@@ -410,13 +410,14 @@ class GeSHi {
      * The overall style for this code block
      * @var string
      */
-    protected $overall_style = 'font-family:monospace;';
+    protected $overall_style = "";//'font-family:monospace;';
 
     /**
      *  The style for the actual code
      * @var string
      */
-    protected $code_style = 'font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;';
+    //protected $code_style = 'font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;';
+    protected $code_style = 'font: normal normal 1em/1.2em; margin:0; padding:0; background:none; vertical-align:top;';
 
     /**
      * The overall class for this code block
