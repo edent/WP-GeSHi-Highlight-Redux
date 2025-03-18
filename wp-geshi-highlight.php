@@ -312,7 +312,7 @@ function wp_geshi_highlight_and_generate_css() {
 			$language_icon = plugin_dir_url(  __FILE__ ) . "svg/" . $language_logo . ".svg";
 			$language_html = 
 				"<span class=\"wp-geshi-language\">" .
-			    	"<img src=\"{$language_icon}\" width=\"32\" alt=\"{$language_display}\" class=\"wp-geshi-language-icon\">".
+			    	"<img src=\"{$language_icon}\" width=\"32\" alt=\"\" class=\"wp-geshi-language-icon\">".
 					"<span itemprop=\"programmingLanguage\"> {$language_display}</span>".
 				"</span>";
 		} else {
