@@ -311,12 +311,12 @@ function wp_geshi_highlight_and_generate_css() {
 		if ( file_exists(    plugin_dir_path( __FILE__ ) . "svg/" . $language_logo . ".svg" ) ) {
 			$language_icon = plugin_dir_url(  __FILE__ ) . "svg/" . $language_logo . ".svg";
 			$language_html = 
-				"<span class=\"wp-geshi-language\">" .
-			    	"<img src=\"{$language_icon}\" width=\"32\" alt=\"\" class=\"wp-geshi-language-icon\">".
-					"<span itemprop=\"programmingLanguage\"> {$language_display}</span>".
+				"<span class=wp-geshi-language>" .
+			    	"<img src=\"{$language_icon}\" width=32 height=32 alt class=wp-geshi-language-icon>".
+					"<span itemprop=programmingLanguage> {$language_display}</span>".
 				"</span>";
 		} else {
-			//	If this is the null languge (_) don't show anything
+			//	If this is the null language (_) don't show anything
 			if ( $language_display != "" ){
 				$language_html = "<span class=\"wp-geshi-language\" itemprop=\"programmingLanguage\"> {$language_display}</span>";
 			} else {
