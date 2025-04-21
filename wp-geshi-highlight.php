@@ -378,6 +378,14 @@ function wp_geshi_code_trim( $code ) {
 
 //	CSS
 function wp_geshi_add_css_to_head() {
+
+	//	Prevent the CSS being added multiple times
+	static $already_added = false;
+	if ( $already_added ) {
+		return;
+	}
+	$already_added = true;
+
 	global $wp_geshi_css_code;
 	global $wp_geshi_requested_css_files;
 
@@ -425,7 +433,12 @@ function wp_geshi_add_css_to_head() {
 	// Echo GeSHi highlighting CSS code inline.
 	if ( strlen( $wp_geshi_css_code ) > 0 ) {
 		// echo "<style>" . $wp_geshi_css_code . "</style>";
-		//	Cannot put a <style> in the body - so cheat and Base64 encode the link!
-		echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"data:text/css;base64," . base64_encode($wp_geshi_css_code) . "\">";
+		//	Cannot put a <style> in the body - so enqueue it as a new style
+		//	Don't B64 it inline - unreliable.
+		//echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"data:text/css;base64," . base64_encode($wp_geshi_css_code) . "\">";
+		
+		wp_register_style(   "wpgeshi-dynamic", false );
+    	wp_enqueue_style(    "wpgeshi-dynamic" );
+		wp_add_inline_style( "wpgeshi-dynamic", $wp_geshi_css_code );
 	}
 }
